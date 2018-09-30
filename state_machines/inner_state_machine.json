@@ -1,0 +1,54 @@
+{
+  "Comment": "State Machine that is run asynchronously from another State Machine",
+  "StartAt": "Try",
+  "States": {
+    "Try": {
+      "Type": "Parallel",
+      "Next": "Send success",
+      "InputPath": "$.state",
+      "ResultPath": "$.state",
+      "Branches": [
+        {
+          "StartAt": "Start",
+          "States": {
+            "Start": {
+              "Type": "Pass",
+              "Next": "Long running operation",
+              "Result": {
+                "data": "data"
+              },
+              "ResultPath": "$.state"
+            },
+            "Long running operation": {
+              "Type": "Wait",
+              "Seconds": 60,
+              "End": true
+            }
+          }
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error_info",
+          "Next": "Send failure"
+        }
+      ]
+    },
+    "Send success": {
+      "Type": "Task",
+      "Resource": "${send_success_lambda_arn}",
+      "End": true
+    },
+    "Send failure": {
+      "Type": "Task",
+      "Resource": "${send_failure_lambda_arn}",
+      "Next": "Fail"
+    },
+    "Fail": {
+      "Type": "Fail",
+      "Error": "$.error_info.Error",
+      "Cause": "$.error_info.Cause"
+    }
+  }
+}

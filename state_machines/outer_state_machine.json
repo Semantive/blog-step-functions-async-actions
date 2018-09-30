@@ -1,0 +1,43 @@
+{
+  "Comment": "State Machine that asynchronously runs another State Machine",
+  "StartAt": "Run asynchronous process",
+  "States": {
+    "Run asynchronous process": {
+      "Type": "Parallel",
+      "End": true,
+      "OutputPath": "$[1]",
+      "Branches": [
+        {
+          "StartAt": "Start asynchronous action",
+          "States": {
+            "Start asynchronous action": {
+              "Type": "Task",
+              "Resource": "${async_invoke_lambda_arn}",
+              "End": true,
+              "Retry": [
+                {
+                  "ErrorEquals": ["MissingScheduledActivityTaskException"],
+                  "IntervalSeconds": 3,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 1.5
+                }
+              ]
+            }
+          }
+        },
+        {
+          "StartAt": "Wait for asynchronous action",
+          "States": {
+            "Wait for asynchronous action": {
+              "Type": "Task",
+              "InputPath": "$.async_action_arguments",
+              "ResultPath": "$.async_result",
+              "Resource": "${wait_for_async_action_activity_arn}",
+              "End": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}

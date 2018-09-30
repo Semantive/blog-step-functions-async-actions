@@ -1,0 +1,23 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "states:StartExecution"
+      ],
+      "Resource": [
+        "arn:aws:states:*:*:stateMachine:*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "states:GetActivityTask"
+      ],
+      "Resource": [
+        "arn:aws:states:*:*:activity:*"
+      ]
+    }
+  ]
+}

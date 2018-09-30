@@ -1,0 +1,1 @@
+Some comment with reference to blog post and information about costs associated with deployment.
