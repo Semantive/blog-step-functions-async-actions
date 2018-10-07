@@ -26,6 +26,7 @@ resource "aws_lambda_function" "async_invoke" {
   runtime = "python3.6"
   filename = "${local.lambda_filename}"
   source_code_hash = "${local.lambda_hash}"
+  timeout = 70
   environment {
     variables {
       ASYNC_ACTION_ACTIVITY_ARN = "${aws_sfn_activity.wait_for_async_action.id}"

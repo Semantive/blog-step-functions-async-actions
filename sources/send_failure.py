@@ -11,7 +11,7 @@ def handler(event, context):
     task_token = event['task_token']
     error_info = event['error_info']
 
-    states_client.send_task_success(
+    states_client.send_task_failure(
         taskToken=task_token,
         error=error_info['Error'],
         cause=error_info.get('Cause', 'Cause is undefined.'),

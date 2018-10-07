@@ -15,9 +15,8 @@
               "Type": "Pass",
               "Next": "Long running operation",
               "Result": {
-                "data": "data"
-              },
-              "ResultPath": "$.state"
+                "result_data": "data"
+              }
             },
             "Long running operation": {
               "Type": "Wait",
@@ -47,8 +46,8 @@
     },
     "Fail": {
       "Type": "Fail",
-      "Error": "$.error_info.Error",
-      "Cause": "$.error_info.Cause"
+      "Error": "InnerStateMachineFailure",
+      "Cause": "Check result of Parallel State"
     }
   }
 }
